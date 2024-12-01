@@ -47,6 +47,30 @@ func parse(r io.Reader) ([]int, []int, error) {
 	return a, b, nil
 }
 
+func countValuesOfIn(a, b []int) map[int]int {
+	counter := make(map[int]int)
+	for _, u := range a {
+		for _, v := range b {
+			if u == v {
+				if i, ok := counter[u]; ok {
+					counter[u] = i + 1
+				} else {
+					counter[u] = 1
+				}
+			}
+		}
+	}
+	return counter
+}
+
+func similarityScore(a, b []int) int {
+	score := 0
+	for u, v := range countValuesOfIn(a, b) {
+		score += u * v
+	}
+	return score
+}
+
 func main() {
 	path := os.Args[1]
 	f, err := os.Open(path)
@@ -63,4 +87,5 @@ func main() {
 	}
 
 	fmt.Println(totalDistance(a, b))
+	fmt.Println(similarityScore(a, b))
 }
