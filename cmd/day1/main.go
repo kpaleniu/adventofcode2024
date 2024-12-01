@@ -7,7 +7,8 @@ import (
 	"os"
 	"sort"
 	"strconv"
-	"strings"
+
+	"github.com/samber/lo"
 )
 
 func distances(a, b []int) []int {
@@ -22,22 +23,18 @@ func distances(a, b []int) []int {
 }
 
 func totalDistance(a, b []int) int {
-	distance := 0
-	for _, v := range distances(a, b) {
-		distance += v
-	}
-	return distance
+	return lo.Sum(distances(a, b))
 }
 
 func parse(r io.Reader) ([]int, []int, error) {
 	a, b := make([]int, 0), make([]int, 0)
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
-		s := strings.Split(scanner.Text(), " ")
-		if u, err := strconv.Atoi(strings.TrimSpace(s[0])); err == nil {
+		s := lo.Words(scanner.Text())
+		if u, err := strconv.Atoi(s[0]); err == nil {
 			a = append(a, u)
 		}
-		if v, err := strconv.Atoi(strings.TrimSpace(s[len(s)-1])); err == nil {
+		if v, err := strconv.Atoi(s[len(s)-1]); err == nil {
 			b = append(b, v)
 		}
 	}
@@ -64,11 +61,7 @@ func countValuesOfIn(a, b []int) map[int]int {
 }
 
 func similarityScore(a, b []int) int {
-	score := 0
-	for u, v := range countValuesOfIn(a, b) {
-		score += u * v
-	}
-	return score
+	return lo.Sum(lo.MapToSlice(countValuesOfIn(a, b), func(k int, v int) int { return k * v }))
 }
 
 func main() {
