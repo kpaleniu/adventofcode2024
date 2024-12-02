@@ -11,19 +11,16 @@ import (
 	"github.com/samber/lo"
 )
 
-func distances(a, b []int) []int {
+func totalDistance(a, b []int) int {
 	sort.Ints(a)
 	sort.Ints(b)
-	result := make([]int, min(len(a), len(b)))
-	for i := range min(len(a), len(b)) {
-		ma, mi := max(a[i], b[i]), min(a[i], b[i])
-		result[i] = ma - mi
-	}
-	return result
-}
-
-func totalDistance(a, b []int) int {
-	return lo.Sum(distances(a, b))
+	return lo.SumBy(lo.Zip2(a, b), func(v lo.Tuple2[int, int]) int {
+		if v.A > v.B {
+			return v.A - v.B
+		} else {
+			return v.B - v.A
+		}
+	})
 }
 
 func parse(r io.Reader) ([]int, []int, error) {
@@ -44,24 +41,10 @@ func parse(r io.Reader) ([]int, []int, error) {
 	return a, b, nil
 }
 
-func countValuesOfIn(a, b []int) map[int]int {
-	counter := make(map[int]int)
-	for _, u := range a {
-		for _, v := range b {
-			if u == v {
-				if i, ok := counter[u]; ok {
-					counter[u] = i + 1
-				} else {
-					counter[u] = 1
-				}
-			}
-		}
-	}
-	return counter
-}
-
 func similarityScore(a, b []int) int {
-	return lo.Sum(lo.MapToSlice(countValuesOfIn(a, b), func(k int, v int) int { return k * v }))
+	vals := lo.Map(a, func(v int, i int) lo.Tuple2[int, int] { return lo.T2(v, lo.Count(b, v)) })
+	multiply := func(t lo.Tuple2[int, int]) int { return t.A * t.B }
+	return lo.SumBy(vals, multiply)
 }
 
 func main() {

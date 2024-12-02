@@ -21,7 +21,7 @@ func TestDistance(t *testing.T) {
 	expected := 11
 	distance := totalDistance(a, b)
 	if distance != expected {
-		t.Errorf("expected %d, got %d", expected, distance)
+		t.Errorf("distance: expected %d, got %d", expected, distance)
 	}
 }
 
@@ -41,6 +41,6 @@ func TestSimilarityScore(t *testing.T) {
 	expected := 31
 	score := similarityScore(a, b)
 	if score != expected {
-		t.Errorf("expected %d, got %d", expected, score)
+		t.Errorf("similarity score: expected %d, got %d", expected, score)
 	}
 }
