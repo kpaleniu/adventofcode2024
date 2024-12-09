@@ -44,7 +44,7 @@ func main() {
 
 	b, err := os.ReadFile(path)
 	if err != nil {
-		fmt.Println("usage: day2 inputfile")
+		fmt.Println("usage: day3 inputfile")
 		os.Exit(1)
 	}
 
