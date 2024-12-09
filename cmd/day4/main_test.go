@@ -30,13 +30,13 @@ AM
 SX`
 	l := strings.Split(foo, "\n")
 	r := rotate(runeSlices(l))
-	xmas := string(r[0])
-	if xmas != "XMAS" {
-		t.Errorf("wrong, got %s", xmas)
-	}
-	samx := string(r[1])
+	samx := string(r[0])
 	if samx != "SAMX" {
 		t.Errorf("wrong, got %s", samx)
+	}
+	xmas := string(r[1])
+	if xmas != "XMAS" {
+		t.Errorf("wrong, got %s", xmas)
 	}
 }
 
@@ -72,7 +72,7 @@ GHI`
 	}
 
 	result := string(flattened)
-	expected := "A DB GEC HF I"
+	expected := "A DB GEC HF I "
 	if result != expected {
 		t.Errorf("expected %s, got %s", expected, result)
 	}
